@@ -2,12 +2,43 @@
 {% block title %}Principal{% endblock %}
 
 {% block scripts %}
+<script>
+  function toggleMenu() {
+    document.getElementById("menu").classList.toggle("show");
+  }
 
+  // Cierra el menú si se hace clic fuera
+  document.addEventListener("click", function(event) {
+    const menu = document.getElementById("menu");
+    const menuBtn = document.querySelector(".menu-btn");
+
+    // Si el menú está abierto y se hace clic fuera de él y del botón
+    if (menu.classList.contains("show") && 
+        !menu.contains(event.target) && 
+        !menuBtn.contains(event.target)) {
+      menu.classList.remove("show");
+    }
+  });
+</script>
+
+
+<script>
+  function confirmLogout() {
+    if (confirm("¿Seguro que quieres cerrar sesión?")) {
+      window.location.href = "{{ url_for('logout') }}";  
+    }
+  }
+</script>
 {% endblock %}
+
+
 
 {% block customCSS %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/Principal.css') }}">
 {% endblock %}
+
+
 
 {% block body %}
 
@@ -16,24 +47,63 @@
 </div>
 
 
-
- <div class="grupo-izquierda">
-  <button class="btn-normal">Usuarios</button>
-  <button class="btn-normal">Produccion</button>
+<div class="logout-btn">
+  <button data-bs-toggle="modal" data-bs-target="#logoutModal">
+    <i class="fa-solid fa-door-open"></i>
+    <i class="fa-solid fa-arrow-right"></i>
+  </button>
 </div>
+
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLabel">Cerrar Sesión</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que quieres cerrar sesión?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Sí, salir</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="menu-btn" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+
+<div class="menu" id="menu">
+    <a href="#">Registrar Actividad</a>
+    <a href="#">Seguimientos</a>
+    <a href="#">Solicitudes de Insumos</a>
+    <a href="#">Registro de Siembra</a>
+</div>
+
+
+<div class="grupo-izquierda">
+    <button class="btn-normal">Usuarios</button>
+    <button class="btn-normal">Produccion</button>
+</div>
+
 
 <div class="btn-wrapper">
-  <div class="circle circle1"></div>
-  <div class="circle circle2"></div>
-  <button class="btn">Cultivos</button>
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <button class="btn">Cultivos</button>
 </div>
-
 
 
 <div class="grupo-derecha">
   <button class="btn-normal">Ventas</button>
   <button class="btn-normal">Evidencias</button>
 </div>
-
 
 {% endblock %}

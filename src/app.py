@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 
 app = Flask(__name__)
 app.secret_key = "clave_super_secreta" 
@@ -34,6 +34,13 @@ def cambio_obligatorio():
 @app.route('/Pagina_principal')
 def Pagina_principal():
     return render_template('auth/Principal.html')
+
+@app.route('/logout')
+def logout():
+    # Limpia la sesión del usuario
+    session.clear()
+    # Redirige al login
+    return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
